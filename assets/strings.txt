@@ -1,0 +1,17 @@
+(simple) Chihiro y sus padres están en el auto,De repente, llegan a un túnel misterioso. Chihiro duda, pero sus padres avanzan.
+(question) El túnel se extiende ante ti, oscuro y enigmático. Tus padres ya comienzan a caminar, pero sientes que algo no está bien. ¿Qué harás?
+(choice 1) Seguir a tus padres
+(choice 2) Quedate en el coche
+(simple) La atmósfera a tu alrededor cambia, el aire se vuelve más denso y un extraño mercado aparece al final del camino. Puedes ver mesas repletas de comida, pero no hay ni una sola persona a la vista...
+(simple) Al verte solo en el coche, tu madre consiguió convencer a tu padre pocos minutos después de entrar en el túnel. Así que decidís volver a la carretera y dar la vuelta.
+(question) Tus padres estan decididos a probar la comida que se encuentra en el mercado
+(simple) Tu padre acabó perdiéndose de todos modos, y era imposible recordar el camino. Llegas a una encrucijada y hay dos rutas posibles
+(question) derecha o izquierda. Los caminos son idénticos. ¿Qué decides?
+(choice 1) derecha
+(choice 2) izquierda
+(simple) ¡Has estado dando vueltas en círculos! Aquí estás de nuevo frente a este misterioso túnel...
+(end) por fin encuentras el camino, y has llegado frente a tu nuevo hogar, junto a tus padres.
+(simple) les adviertes de que es peligroso, pero acaban comiendo de todos modos.
+(question) Desgraciadamente no funciona, siguen comiendo sin volverse siquiera hacia ti... Así que decides explorar los alrededores mientras esperas a que tus padres terminen de comer.
+(choice) detener a tus padres
+(choice) te unes a ellos
