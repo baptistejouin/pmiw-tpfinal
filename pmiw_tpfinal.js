@@ -125,6 +125,11 @@ function mousePressed() {
 
 function dibujarFlujo() {
   // imágenes
+  /*
+    Muestra una imagen del array 'imagenes' correspondiente a la rama actual. 
+    Divide el número de la rama por 3 porque cada imagen está asociada 
+    a un conjunto de 3 líneas de texto. 
+  */
   // image(imagenes[rama / 3], 0, 0, anchoPantalla, altoPantalla); // necesito 20 imágenes
 
   // texto principal
