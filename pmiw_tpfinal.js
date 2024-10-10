@@ -167,7 +167,7 @@ function dibujarFlujo() {
 
   // para ayudarle a orientarse, texto en la parte superior izquierda de la pantalla
   fill(255);
-  text(`rama línea : ${rama + 1} | imagen: ${rama / 3}`, 10, tamanoFuente);
+  text(`rama línea : ${rama + 1} | imagen: ${rama / 3}`, 100, tamanoFuente);
 }
 
 function mousePressed() {
