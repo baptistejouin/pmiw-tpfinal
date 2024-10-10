@@ -133,7 +133,7 @@ function dibujarFlujo() {
   // image(imagenes[rama / 3], 0, 0, anchoPantalla, altoPantalla); // necesito 20 imágenes
 
   // texto principal
-  fill("rgba(0, 0, 0, 0.25)");
+  fill("rgba(0, 0, 0, 0.35)");
   rect(
     textoPrincipal.posicionX,
     textoPrincipal.posicionY,
@@ -141,6 +141,7 @@ function dibujarFlujo() {
     textoPrincipal.alto,
     2
   );
+  
   fill(255);
   text(
     textos[rama],
@@ -152,7 +153,7 @@ function dibujarFlujo() {
 
   // opción 1 (izquierda)
   if (textos[rama + 1] !== "") {
-    fill("rgba(0, 0, 0, 0.25)");
+    fill("rgba(0, 0, 0, 0.35)");
     rect(
       botonIzquierdo.posicionX,
       botonIzquierdo.posicionY,
@@ -160,6 +161,7 @@ function dibujarFlujo() {
       botonIzquierdo.alto,
       2
     );
+    
     fill(255);
     text(
       textos[rama + 1].slice(2),
@@ -172,7 +174,7 @@ function dibujarFlujo() {
 
   // opción 2 (derecha)
   if (textos[rama + 2] !== "") {
-    fill("rgba(0, 0, 0, 0.25)");
+    fill("rgba(0, 0, 0, 0.35)");
     rect(
       botonDerecho.posicionX,
       botonDerecho.posicionY,
