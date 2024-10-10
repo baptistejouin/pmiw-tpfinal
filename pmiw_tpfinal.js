@@ -75,7 +75,7 @@ function setup() {
   noStroke();
 
   pantalla = "flujo"; // hay 3 pantallas: inicio, creditos, flujo
-  rama = 0; // cada 3 líneas, hay un nuevo texto principal, una línea para la primera opción y otra para la segunda
+  rama = 0; // cada 3 líneas (en assets/textos.txt), hay un nuevo texto principal, una línea para la primera opción y otra para la segunda
 }
 
 function draw() {
@@ -97,7 +97,7 @@ function dibujarFlujo() {
   /*
     Muestra una imagen del array 'imagenes' correspondiente a la rama actual. 
     Divide el número de la rama por 3 porque cada imagen está asociada 
-    a un conjunto de 3 líneas de texto. 
+    a un conjunto de 3 líneas de texto (en assets/textos.txt). 
   */
   // image(imagenes[rama / 3], 0, 0, anchoPantalla, altoPantalla); // necesito 20 imágenes
 
@@ -133,7 +133,7 @@ function dibujarFlujo() {
     text(
       /*
         Extrae el texto desde el tercer carácter de la línea correspondiente 
-        a la segunda opción de la rama actual. Los dos primeros caracteres 
+        a la segunda opción de la rama actual (en assets/textos.txt). Los dos primeros caracteres 
         representan el número de línea de la siguiente rama, por lo que se omiten, 
         dejando solo el texto de la opción en sí. 
       */
@@ -181,7 +181,7 @@ function mousePressed() {
   ) {
     /* 
       Extrae los 2 primeros caracteres de la línea correspondiente a la opción 
-      (estos caracteres representan el número de línea de la siguiente rama). 
+      (estos caracteres representan el número de línea de la siguiente rama) (en assets/textos.txt). 
       Luego, convierte esos caracteres en un número utilizando parseInt 
       (ya que inicialmente son de tipo texto). 
 
