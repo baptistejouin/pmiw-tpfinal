@@ -1,8 +1,7 @@
 let anchoPantalla = 640;
 let altoPantalla = 480;
 let tamanoFuente = 16;
-let pantalla;
-let rama;
+let pantalla, rama;
 let textos = [];
 let imagenes = [];
 let sonidos = [];
@@ -21,6 +20,11 @@ let rutasImagenes = [
   "/assets/img/11.png",
 ];
 
+/*
+  Tamaños obtenidos por prueba y error, utilizando el tamaño de la pantalla 
+  y el tamaño de la fuente para ajustarse de la mejor manera posible 
+  si se cambian estos valores. 
+*/
 let mitadAnchoPantalla = anchoPantalla / 2;
 let anchoBoton = mitadAnchoPantalla - 75;
 let posicionYBoton = altoPantalla - tamanoFuente * 3.5;
@@ -88,6 +92,84 @@ function draw() {
   }
 }
 
+function dibujarFlujo() {
+  // imágenes
+  /*
+    Muestra una imagen del array 'imagenes' correspondiente a la rama actual. 
+    Divide el número de la rama por 3 porque cada imagen está asociada 
+    a un conjunto de 3 líneas de texto. 
+  */
+  // image(imagenes[rama / 3], 0, 0, anchoPantalla, altoPantalla); // necesito 20 imágenes
+
+  // texto principal / primera linea (cuadro de texto en la parte superior)
+  fill("rgba(0, 0, 0, 0.35)");
+  rect(
+    textoPrincipal.posicionX,
+    textoPrincipal.posicionY,
+    textoPrincipal.ancho,
+    textoPrincipal.alto,
+    2
+  );
+  fill(255);
+  text(
+    textos[rama],
+    textoPrincipal.posicionX,
+    textoPrincipal.posicionY,
+    textoPrincipal.ancho,
+    textoPrincipal.alto
+  );
+
+  // opción 1 / segunda linea (boton a la izquierda)
+  if (textos[rama + 1] !== "") {
+    fill("rgba(0, 0, 0, 0.35)");
+    rect(
+      botonIzquierdo.posicionX,
+      botonIzquierdo.posicionY,
+      botonIzquierdo.ancho,
+      botonIzquierdo.alto,
+      2
+    );
+    fill(255);
+    text(
+      /*
+        Extrae el texto desde el tercer carácter de la línea correspondiente 
+        a la segunda opción de la rama actual. Los dos primeros caracteres 
+        representan el número de línea de la siguiente rama, por lo que se omiten, 
+        dejando solo el texto de la opción en sí. 
+      */
+      textos[rama + 1].slice(2),
+      botonIzquierdo.posicionX,
+      botonIzquierdo.posicionY,
+      botonIzquierdo.ancho,
+      botonIzquierdo.alto
+    );
+  }
+
+  // opción 2 / tercera linea (boton a la derecha)
+  if (textos[rama + 2] !== "") {
+    fill("rgba(0, 0, 0, 0.35)");
+    rect(
+      botonDerecho.posicionX,
+      botonDerecho.posicionY,
+      botonDerecho.ancho,
+      botonDerecho.alto,
+      2
+    );
+    fill(255);
+    text(
+      textos[rama + 2].slice(2),
+      botonDerecho.posicionX,
+      botonDerecho.posicionY,
+      botonDerecho.ancho,
+      botonDerecho.alto
+    );
+  }
+
+  // para ayudarle a orientarse, texto en la parte superior izquierda de la pantalla
+  fill(255);
+  text(`rama línea : ${rama + 1} | imagen: ${rama / 3}`, 10, tamanoFuente);
+}
+
 function mousePressed() {
   // verificar si está en el botón izquierdo
   if (
@@ -121,86 +203,6 @@ function mousePressed() {
   ) {
     rama = parseInt(textos[rama + 2].slice(0, 2)) - 1;
   }
-}
-
-function dibujarFlujo() {
-  // imágenes
-  /*
-    Muestra una imagen del array 'imagenes' correspondiente a la rama actual. 
-    Divide el número de la rama por 3 porque cada imagen está asociada 
-    a un conjunto de 3 líneas de texto. 
-  */
-  // image(imagenes[rama / 3], 0, 0, anchoPantalla, altoPantalla); // necesito 20 imágenes
-
-  // texto principal
-  fill("rgba(0, 0, 0, 0.35)");
-  rect(
-    textoPrincipal.posicionX,
-    textoPrincipal.posicionY,
-    textoPrincipal.ancho,
-    textoPrincipal.alto,
-    2
-  );
-  
-  fill(255);
-  text(
-    textos[rama],
-    textoPrincipal.posicionX,
-    textoPrincipal.posicionY,
-    textoPrincipal.ancho,
-    textoPrincipal.alto
-  );
-
-  // opción 1 (izquierda)
-  if (textos[rama + 1] !== "") {
-    fill("rgba(0, 0, 0, 0.35)");
-    rect(
-      botonIzquierdo.posicionX,
-      botonIzquierdo.posicionY,
-      botonIzquierdo.ancho,
-      botonIzquierdo.alto,
-      2
-    );
-    
-    fill(255);
-    text(
-      textos[rama + 1].slice(2),
-      botonIzquierdo.posicionX,
-      botonIzquierdo.posicionY,
-      botonIzquierdo.ancho,
-      botonIzquierdo.alto
-    );
-  }
-
-  // opción 2 (derecha)
-  if (textos[rama + 2] !== "") {
-    fill("rgba(0, 0, 0, 0.35)");
-    rect(
-      botonDerecho.posicionX,
-      botonDerecho.posicionY,
-      botonDerecho.ancho,
-      botonDerecho.alto,
-      2
-    );
-    fill(255);
-    text(
-      /*
-        Extrae el texto desde el tercer carácter de la línea correspondiente 
-        a la segunda opción de la rama actual. Los dos primeros caracteres 
-        representan el número de línea de la siguiente rama, por lo que se omiten, 
-        dejando solo el texto de la opción en sí. 
-      */
-      textos[rama + 2].slice(2),
-      botonDerecho.posicionX,
-      botonDerecho.posicionY,
-      botonDerecho.ancho,
-      botonDerecho.alto
-    );
-  }
-
-  // debug
-  fill(255);
-  text(`rama línea : ${rama + 1} | imagen: ${rama / 3}`, 10, tamanoFuente);
 }
 
 function dibujarCreditos() {
