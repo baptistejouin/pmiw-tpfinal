@@ -1,18 +1,18 @@
 -Chihiro y sus padres están en el auto,De repente, llegan a un túnel misterioso. Chihiro duda, pero sus padres avanzan.
 
-04 next
+04 siguiente
 -El túnel se extiende ante ti, oscuro y enigmático. Tus padres ya comienzan a caminar, pero sientes que algo no está bien. ¿Qué harás?
 07 Seguir a tus padres
 37 Quedate en el coche
 -La atmósfera a tu alrededor cambia, el aire se vuelve más denso y un extraño mercado aparece al final del camino. Puedes ver mesas repletas de comida, pero no hay ni una sola persona a la vista...
 
-10 next
+10 siguiente
 -Tus padres estan decididos a probar la comida que se encuentra en el mercado
 13 detener a tus padres
 55 te unes a ellos
 -Desgraciadamente no funciona, siguen comiendo sin volverse siquiera hacia ti... Así que decides explorar los alrededores mientras esperas a que tus padres terminen de comer.
 
-16 next
+16 siguiente
 -Te encuentras a Haku en el camino, te cuenta sobre la maldicion y se ofrece a ayudarte
 
 19 aceptas
@@ -24,7 +24,7 @@
 25 ir con yubaba
 -Chihiro va a perdirle trabajo a Yubaba — Trabajo, dices. Muy bien, puedo ofrecerte uno, pero bajo una condición. Yubaba saca un contrato mágico y lo extiende frente a Chihiro: — Si firmas este contrato, te robaré tu nombre. A partir de ahora, te llamarás Sen, y no podrás irte hasta que pagues tu deuda.
 
-28 next
+28 siguiente
 -Tienes 2 opciones firmar y aceptar el trabajo o escapar
 34 firmar y aceptar el trabajo
 31 escapar
@@ -36,10 +36,10 @@
 
 -Al verte solo en el coche, tu madre consiguió convencer a tu padre pocos minutos después de entrar en el túnel. Así que decidís volver a la carretera y dar la vuelta.
 
-40 next
+40 siguiente
 -Tu padre acabó perdiéndose de todos modos, y era imposible recordar el camino. Llegas a una encrucijada y hay dos rutas posibles
 
-43 next
+43 siguiente
 -Derecha o izquierda. Los caminos son idénticos. ¿Qué decides?
 46 izquierda
 49 derecha
@@ -48,13 +48,13 @@
 
 -¡Has estado dando vueltas en círculos! Aquí estás de nuevo frente a este misterioso túnel...
 
-52 next
+04 siguiente
 -Chihiro acaba transformada en cerdo. Ella y sus padres olvidarán que una vez fueron humanos
 01 volver al principio de la historia
 
 -Les adviertes de que es peligroso, pero acaban comiendo de todos modos.
 
-52 next
+52 siguiente
 - Chihiro  encuentra a Kamaji, un hombre con seis brazos que maneja la maquinaria de la sala de calderas. Está ocupado, pero Chihiro se arma de valor y le dice: — ¡Necesito trabajar aquí!
 
-28 next
+28 siguiente
