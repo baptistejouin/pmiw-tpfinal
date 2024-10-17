@@ -8,7 +8,72 @@ let imagenes = [];
 let buttons = [];
 let sonidos = [];
 let pantallas = {};
-let isPlayingBackground = false;
+
+function preload() {
+  let rutasSonidos = [
+    "assets/sound/garden-sunny-day.mp3",
+    "assets/sound/intro.mp3",
+    "assets/sound/swoosh-1.mp3",
+    "assets/sound/swoosh-2.mp3",
+  ];
+
+  // precargar textos
+  textos = loadStrings("/assets/textos.txt");
+  actiones = loadStrings("/assets/actiones.txt");
+  buttons = loadStrings("/assets/buttons.txt");
+
+  // precargar imágenes
+  for (let i = 1; i <= 20; i++) {
+    imagenes.push(loadImage(`/assets/img2/${i}.png`));
+  }
+
+  // precargar sonidos
+  soundFormats("mp3");
+  for (let i = 0; i < rutasSonidos.length; i++) {
+    sonidos.push(loadSound(rutasSonidos[i]));
+  }
+}
+
+function setup() {
+  createCanvas(anchoPantalla, altoPantalla);
+  textSize(tamanoFuente);
+  textAlign(CENTER, CENTER);
+  noStroke();
+
+  actualPantalla = "inicio";
+
+  for (let i = 0; i < 20; i++) {
+    pantallas["pantalla_" + (i + 1)] = {
+      image: imagenes[i],
+      texto: textos[i],
+      buttons: buttons[i].split("|"),
+      actiones: actiones[i].split("|"),
+    };
+  }
+}
+
+function draw() {
+  background(200);
+  textSize(tamanoFuente);
+  fill(0);
+
+  if (actualPantalla === "inicio") {
+    dibujarInicio();
+  } else if (actualPantalla === "creditos") {
+    dibujarCreditos();
+  } else {
+    dibujarFlujo(
+      pantallas[actualPantalla]["image"],
+      pantallas[actualPantalla]["texto"],
+      pantallas[actualPantalla]["buttons"][0],
+      pantallas[actualPantalla]["buttons"][1]
+    );
+  }
+
+  // para ayudarle a orientarse, texto en la parte superior izquierda de la pantalla
+  fill(255);
+  text(`actualPantalla : ${actualPantalla}`, 100, tamanoFuente);
+}
 
 /*
   Tamaños obtenidos por prueba y error, utilizando el tamaño de la pantalla 
@@ -42,77 +107,9 @@ let botonDerecho = {
   alto: altoBoton,
 };
 
-function preload() {
-  let rutasSonidos = [
-    "assets/sound/garden-sunny-day.mp3",
-    "assets/sound/intro.mp3",
-    "assets/sound/swoosh-1.mp3",
-    "assets/sound/swoosh-2.mp3",
-  ];
-
-  // precargar textos
-  textos = loadStrings("/assets/textos.txt");
-  actiones = loadStrings("/assets/actiones.txt");
-  buttons = loadStrings("/assets/buttons.txt");
-
-  // precargar imágenes
-  for (let i = 1; i <= 20; i++) {
-    imagenes.push(loadImage(`/assets/img2/${i}.png`));
-  }
-
-  // precargar sonidos
-  soundFormats("mp3");
-  for (let i = 0; i < rutasSonidos.length; i++) {
-    sonidos.push(loadSound(rutasSonidos[i]));
-  }
-}
-
-function setup() {
-  createCanvas(anchoPantalla, altoPantalla);
-  textSize(tamanoFuente);
-  textAlign(CENTER, CENTER);
-  noStroke();
-
-  actualPantalla = "pantalla_1";
-
-  pantallas["initio"] = "";
-  pantallas["credito"] = "";
-
-  for (let i = 0; i < 20; i++) {
-    console.log(i);
-
-    pantallas["pantalla_" + (i + 1)] = {
-      image: imagenes[i],
-      texto: textos[i],
-      buttons: buttons[i].split("|"),
-      actiones: actiones[i].split("|"),
-    };
-  }
-}
-
-function draw() {
-  background(200);
-
-  if (actualPantalla === "inicio") {
-    dibujarInicio();
-  }
-  if (actualPantalla === "creditos") {
-    dibujarCreditos();
-  } else {
-    dibujarFlujo(
-      pantallas[actualPantalla]["image"],
-      pantallas[actualPantalla]["texto"],
-      pantallas[actualPantalla]["buttons"][0],
-      pantallas[actualPantalla]["buttons"][1]
-    );
-  }
-}
-
 function dibujarFlujo(img, texto, button1, button2) {
   // imágenes
-  if (img) {
-    image(img, 0, 0, anchoPantalla, altoPantalla); // necesito 20 imágenes
-  }
+  image(img, 0, 0, anchoPantalla, altoPantalla);
 
   // texto principal / primera linea (cuadro de texto en la parte superior)
   fill("rgba(0, 0, 0, 0.35)");
@@ -171,54 +168,68 @@ function dibujarFlujo(img, texto, button1, button2) {
       botonIzquierdo.alto
     );
   }
-
-  // para ayudarle a orientarse, texto en la parte superior izquierda de la pantalla
-  fill(255);
-  text(`rama : ${actualPantalla}`, 100, tamanoFuente);
 }
 
 function mousePressed() {
-  if (!isPlayingBackground) {
+  if (actualPantalla === "inicio") {
     sonidos[0].play();
-    isPlayingBackground = true;
-  }
+    actualPantalla = "pantalla_1";
+  } else if (actualPantalla === "creditos") {
+    sonidos[0].stop();
+    actualPantalla = "inicio";
+  } else {
+    // flujo
+    let actionDerecho = pantallas[actualPantalla]["actiones"][0];
+    let actionIzquierdo = pantallas[actualPantalla]["actiones"][1];
 
-  let actionDerecho = pantallas[actualPantalla]["actiones"][0];
-  let actionIzquierdo = pantallas[actualPantalla]["actiones"][1];
+    // verificar si está en el botón izquierdo
+    if (
+      mouseX > botonDerecho.posicionX &&
+      mouseX < botonDerecho.posicionX + botonDerecho.ancho &&
+      mouseY > botonDerecho.posicionY &&
+      mouseY < botonDerecho.posicionY + botonDerecho.alto &&
+      actionDerecho
+    ) {
+      console.log("go to", actionDerecho);
+      sonidos[3].play();
 
-  // verificar si está en el botón izquierdo
-  if (
-    mouseX > botonDerecho.posicionX &&
-    mouseX < botonDerecho.posicionX + botonDerecho.ancho &&
-    mouseY > botonDerecho.posicionY &&
-    mouseY < botonDerecho.posicionY + botonDerecho.alto &&
-    actionDerecho
-  ) {
-    console.log("go to", actionDerecho);
-    sonidos[3].play();
+      actualPantalla = actionDerecho;
+    }
 
-    actualPantalla = actionDerecho;
-  }
+    // verificar si está en el botón derecho
+    if (
+      mouseX > botonIzquierdo.posicionX &&
+      mouseX < botonIzquierdo.posicionX + botonIzquierdo.ancho &&
+      mouseY > botonIzquierdo.posicionY &&
+      mouseY < botonIzquierdo.posicionY + botonIzquierdo.alto &&
+      actionIzquierdo
+    ) {
+      console.log("go to", actionIzquierdo);
 
-  // verificar si está en el botón derecho
-  if (
-    mouseX > botonIzquierdo.posicionX &&
-    mouseX < botonIzquierdo.posicionX + botonIzquierdo.ancho &&
-    mouseY > botonIzquierdo.posicionY &&
-    mouseY < botonIzquierdo.posicionY + botonIzquierdo.alto &&
-    actionIzquierdo
-  ) {
-    console.log("go to", actionIzquierdo);
-
-    sonidos[2].play();
-    actualPantalla = actionIzquierdo;
+      sonidos[2].play();
+      actualPantalla = actionIzquierdo;
+    }
   }
 }
 
 function dibujarCreditos() {
-  text("Créditos", 0, tamanoFuente);
+  textSize(tamanoFuente * 2);
+  text("Credito!", anchoPantalla / 2, altoPantalla / 2);
+  textSize(tamanoFuente);
+  text(
+    "Clic para volver al principio",
+    anchoPantalla / 2,
+    altoPantalla / 2 + tamanoFuente * 3
+  );
 }
 
 function dibujarInicio() {
-  text("Inicio", 0, tamanoFuente);
+  textSize(tamanoFuente * 2);
+  text("El viaje de Chihiro", anchoPantalla / 2, altoPantalla / 2);
+  textSize(tamanoFuente);
+  text(
+    "Clic para empezar",
+    anchoPantalla / 2,
+    altoPantalla / 2 + tamanoFuente * 3
+  );
 }

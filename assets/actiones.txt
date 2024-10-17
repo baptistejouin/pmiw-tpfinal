@@ -3,12 +3,12 @@ pantalla_4|pantalla_3
 pantalla_9
 pantalla_5
 pantalla_7
-pantalla_2
+creditos
 pantalla_8|pantalla_6
-pantalla_2
+creditos
 pantalla_12|pantalla_10
 pantalla_11
-pantalla_2
+creditos
 pantalla_13
 pantalla_14
 pantalla_15
@@ -16,5 +16,5 @@ pantalla_17|pantalla_16
 pantalla_18
 pantalla_18
 pantalla_19|pantalla_20
-pantalla_2
-pantalla_2
+creditos
+creditos
