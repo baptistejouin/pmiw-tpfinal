@@ -62,7 +62,7 @@ function draw() {
   } else if (actualPantalla === "creditos") {
     dibujarCreditos();
   } else {
-    dibujarFlujo(
+    dibujarPantalla(
       pantallas[actualPantalla]["image"],
       pantallas[actualPantalla]["texto"],
       pantallas[actualPantalla]["buttons"][0],
@@ -107,7 +107,7 @@ let botonDerecho = {
   alto: altoBoton,
 };
 
-function dibujarFlujo(img, texto, button1, button2) {
+function dibujarPantalla(img, texto, button1, button2) {
   // imágenes
   image(img, 0, 0, anchoPantalla, altoPantalla);
 
