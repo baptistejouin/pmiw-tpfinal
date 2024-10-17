@@ -1,24 +1,14 @@
 let anchoPantalla = 640;
 let altoPantalla = 480;
 let tamanoFuente = 16;
-let pantalla, rama;
+let actualPantalla;
 let textos = [];
+let actiones = [];
 let imagenes = [];
+let buttons = [];
 let sonidos = [];
-let rutasSonidos = [];
-let rutasImagenes = [
-  "/assets/img/01.png",
-  "/assets/img/02.png",
-  "/assets/img/03.png",
-  "/assets/img/04.png",
-  "/assets/img/05.png",
-  "/assets/img/06.png",
-  "/assets/img/07.png",
-  "/assets/img/08.png",
-  "/assets/img/09.png",
-  "/assets/img/10.png",
-  "/assets/img/11.png",
-];
+let pantallas = {};
+let isPlayingBackground = false;
 
 /*
   Tamaños obtenidos por prueba y error, utilizando el tamaño de la pantalla 
@@ -53,12 +43,21 @@ let botonDerecho = {
 };
 
 function preload() {
+  let rutasSonidos = [
+    "assets/sound/garden-sunny-day.mp3",
+    "assets/sound/intro.mp3",
+    "assets/sound/swoosh-1.mp3",
+    "assets/sound/swoosh-2.mp3",
+  ];
+
   // precargar textos
-  textos = loadStrings("./assets/textos.txt");
+  textos = loadStrings("/assets/textos.txt");
+  actiones = loadStrings("/assets/actiones.txt");
+  buttons = loadStrings("/assets/buttons.txt");
 
   // precargar imágenes
-  for (let i = 0; i < rutasImagenes.length; i++) {
-    imagenes.push(loadImage(rutasImagenes[i]));
+  for (let i = 1; i <= 20; i++) {
+    imagenes.push(loadImage(`/assets/img2/${i}.png`));
   }
 
   // precargar sonidos
@@ -74,32 +73,46 @@ function setup() {
   textAlign(CENTER, CENTER);
   noStroke();
 
-  pantalla = "flujo"; // hay 3 pantallas: inicio, creditos, flujo
-  rama = 0; // cada 3 líneas (en assets/textos.txt), hay un nuevo texto principal, una línea para la primera opción y otra para la segunda
+  actualPantalla = "pantalla_1";
+
+  pantallas["initio"] = "";
+  pantallas["credito"] = "";
+
+  for (let i = 0; i < 20; i++) {
+    console.log(i);
+
+    pantallas["pantalla_" + (i + 1)] = {
+      image: imagenes[i],
+      texto: textos[i],
+      buttons: buttons[i].split("|"),
+      actiones: actiones[i].split("|"),
+    };
+  }
 }
 
 function draw() {
   background(200);
 
-  if (pantalla === "inicio") {
+  if (actualPantalla === "inicio") {
     dibujarInicio();
   }
-  if (pantalla === "creditos") {
+  if (actualPantalla === "creditos") {
     dibujarCreditos();
-  }
-  if (pantalla === "flujo") {
-    dibujarFlujo();
+  } else {
+    dibujarFlujo(
+      pantallas[actualPantalla]["image"],
+      pantallas[actualPantalla]["texto"],
+      pantallas[actualPantalla]["buttons"][0],
+      pantallas[actualPantalla]["buttons"][1]
+    );
   }
 }
 
-function dibujarFlujo() {
+function dibujarFlujo(img, texto, button1, button2) {
   // imágenes
-  /*
-    Muestra una imagen del array 'imagenes' correspondiente a la rama actual. 
-    Divide el número de la rama por 3 porque cada imagen está asociada 
-    a un conjunto de 3 líneas de texto (en assets/textos.txt). 
-  */
-  // image(imagenes[rama / 3], 0, 0, anchoPantalla, altoPantalla); // necesito 20 imágenes
+  if (img) {
+    image(img, 0, 0, anchoPantalla, altoPantalla); // necesito 20 imágenes
+  }
 
   // texto principal / primera linea (cuadro de texto en la parte superior)
   fill("rgba(0, 0, 0, 0.35)");
@@ -112,7 +125,7 @@ function dibujarFlujo() {
   );
   fill(255);
   text(
-    textos[rama],
+    texto,
     textoPrincipal.posicionX,
     textoPrincipal.posicionY,
     textoPrincipal.ancho,
@@ -120,33 +133,7 @@ function dibujarFlujo() {
   );
 
   // opción 1 / segunda linea (boton a la izquierda)
-  if (textos[rama + 1] !== "") {
-    fill("rgba(0, 0, 0, 0.35)");
-    rect(
-      botonIzquierdo.posicionX,
-      botonIzquierdo.posicionY,
-      botonIzquierdo.ancho,
-      botonIzquierdo.alto,
-      2
-    );
-    fill(255);
-    text(
-      /*
-        Extrae el texto desde el tercer carácter de la línea correspondiente 
-        a la segunda opción de la rama actual (en assets/textos.txt). Los dos primeros caracteres 
-        representan el número de línea de la siguiente rama, por lo que se omiten, 
-        dejando solo el texto de la opción en sí. 
-      */
-      textos[rama + 1].slice(2),
-      botonIzquierdo.posicionX,
-      botonIzquierdo.posicionY,
-      botonIzquierdo.ancho,
-      botonIzquierdo.alto
-    );
-  }
-
-  // opción 2 / tercera linea (boton a la derecha)
-  if (textos[rama + 2] !== "") {
+  if (button1) {
     fill("rgba(0, 0, 0, 0.35)");
     rect(
       botonDerecho.posicionX,
@@ -157,7 +144,7 @@ function dibujarFlujo() {
     );
     fill(255);
     text(
-      textos[rama + 2].slice(2),
+      button1,
       botonDerecho.posicionX,
       botonDerecho.posicionY,
       botonDerecho.ancho,
@@ -165,43 +152,66 @@ function dibujarFlujo() {
     );
   }
 
+  // opción 2 / tercera linea (boton a la derecha)
+  if (button2) {
+    fill("rgba(0, 0, 0, 0.35)");
+    rect(
+      botonIzquierdo.posicionX,
+      botonIzquierdo.posicionY,
+      botonIzquierdo.ancho,
+      botonIzquierdo.alto,
+      2
+    );
+    fill(255);
+    text(
+      button2,
+      botonIzquierdo.posicionX,
+      botonIzquierdo.posicionY,
+      botonIzquierdo.ancho,
+      botonIzquierdo.alto
+    );
+  }
+
   // para ayudarle a orientarse, texto en la parte superior izquierda de la pantalla
   fill(255);
-  text(`rama línea : ${rama + 1} | imagen: ${rama / 3}`, 100, tamanoFuente);
+  text(`rama : ${actualPantalla}`, 100, tamanoFuente);
 }
 
 function mousePressed() {
-  // verificar si está en el botón izquierdo
-  if (
-    mouseX > botonIzquierdo.posicionX &&
-    mouseX < botonIzquierdo.posicionX + botonIzquierdo.ancho &&
-    mouseY > botonIzquierdo.posicionY &&
-    mouseY < botonIzquierdo.posicionY + botonIzquierdo.alto &&
-    textos[rama + 1] !== ""
-  ) {
-    /* 
-      Extrae los 2 primeros caracteres de la línea correspondiente a la opción 
-      (estos caracteres representan el número de línea de la siguiente rama) (en assets/textos.txt). 
-      Luego, convierte esos caracteres en un número utilizando parseInt 
-      (ya que inicialmente son de tipo texto). 
-
-      Después, resta 1 para obtener el índice correcto dentro del array de textos. 
-      Podríamos empezar desde 0 para evitar esta resta, pero en la visualización 
-      de Processing la numeración de las líneas comienza en 1, lo que hace que sea 
-      más fácil ubicarse al crear el árbol en textos.txt.
-    */
-    rama = parseInt(textos[rama + 1].slice(0, 2)) - 1;
+  if (!isPlayingBackground) {
+    sonidos[0].play();
+    isPlayingBackground = true;
   }
 
-  // verificar si está en el botón derecho
+  let actionDerecho = pantallas[actualPantalla]["actiones"][0];
+  let actionIzquierdo = pantallas[actualPantalla]["actiones"][1];
+
+  // verificar si está en el botón izquierdo
   if (
     mouseX > botonDerecho.posicionX &&
     mouseX < botonDerecho.posicionX + botonDerecho.ancho &&
     mouseY > botonDerecho.posicionY &&
     mouseY < botonDerecho.posicionY + botonDerecho.alto &&
-    textos[rama + 2] !== ""
+    actionDerecho
   ) {
-    rama = parseInt(textos[rama + 2].slice(0, 2)) - 1;
+    console.log("go to", actionDerecho);
+    sonidos[3].play();
+
+    actualPantalla = actionDerecho;
+  }
+
+  // verificar si está en el botón derecho
+  if (
+    mouseX > botonIzquierdo.posicionX &&
+    mouseX < botonIzquierdo.posicionX + botonIzquierdo.ancho &&
+    mouseY > botonIzquierdo.posicionY &&
+    mouseY < botonIzquierdo.posicionY + botonIzquierdo.alto &&
+    actionIzquierdo
+  ) {
+    console.log("go to", actionIzquierdo);
+
+    sonidos[2].play();
+    actualPantalla = actionIzquierdo;
   }
 }
 
