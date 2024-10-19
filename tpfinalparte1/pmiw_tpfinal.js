@@ -1,3 +1,5 @@
+// Baptiste JOUIN (pasaporte: 23KH84343) : https://youtu.be/Lc5SOUfo8nU
+
 let anchoPantalla = 640;
 let altoPantalla = 480;
 let tamanoFuente = 16;
