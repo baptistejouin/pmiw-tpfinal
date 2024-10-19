@@ -53,9 +53,9 @@ function setup() {
 }
 
 function draw() {
-  background(200);
+  background(0);
   textSize(tamanoFuente);
-  fill(0);
+  fill(255);
 
   if (actualPantalla === "inicio") {
     dibujarInicio();
