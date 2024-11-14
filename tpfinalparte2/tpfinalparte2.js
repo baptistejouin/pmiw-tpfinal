@@ -1,4 +1,5 @@
-// Baptiste JOUIN (pasaporte: 23KH84343) : https://youtu.be/Lc5SOUfo8nU
+// Baptiste JOUIN (intercambio, Francia, pasaporte: 23KH84343)
+// https://youtu.be/xUz1vyMmtYk
 
 class Principal {
   constructor() {
@@ -12,13 +13,13 @@ class Principal {
       ),
       instrucciones: new Pantalla(
         "Instrucciones",
-        "Usa las flechas del teclado para moverte el personaje",
-        "Recoge 50 tesoros para ganar ¡Cuidado con los obstáculos!"
+        "Usa las flechas del teclado para moverte",
+        "← → ↑ ↓ para mover el personaje\nRecoge 50 tesoros para ganar\n¡Cuidado con los obstáculos!"
       ),
       creditos: new Pantalla(
         "¡Fin del Juego!",
         "Haz clic para volver al inicio",
-        "Codigo baptiste JOUIN. Assets by https://pixel-boy.itch.io/"
+        "codigo @baptistejouin\nAssets by https://pixel-boy.itch.io/"
       ),
     };
   }
@@ -42,8 +43,6 @@ class Principal {
     }
 
     if (this.juego.haTerminado()) {
-      sonidos[3].stop();
-      sonidos[2].play();
       this.juego = new Juego();
       this.pantallaActual = 4;
     }
@@ -242,12 +241,11 @@ class Obstaculo {
   dibujar() {
     push();
     translate(this.posX, this.posY);
-    if (this.tipo === "movil") {
-      imageMode(CENTER);
-      image(imagenes[1], 0, 0, this.tamano, this.tamano);
-    } else {
-      imageMode(CENTER);
+    imageMode(CENTER);
+    if (this.tipo === "estatico") {
       image(imagenes[4], 0, 0, this.tamano, this.tamano);
+    } else {
+      image(imagenes[1], 0, 0, this.tamano, this.tamano);
     }
     pop();
   }
@@ -261,13 +259,12 @@ class Juego {
     this.obstaculos = [];
     this.tesoros = [];
     this.decor = null;
-    this.generarNivel();
-    this.generarMapa();
+    this.generarNivel(); // genera los obstaculos y tesoros
+    this.generarMapa(); // genera el mapa de fondo una sola vez
     sonidos[3].setVolume(0.1);
   }
 
   dibujar() {
-    background("#74A334");
     image(this.decor, 0, 0);
 
     for (let i = 0; i < this.tesoros.length; i++) {
@@ -326,25 +323,32 @@ class Juego {
     let numDetalles = 80;
     let detallesTamano = 32;
     let posDetalles = [
-      { x1: 0, y1: 32 },
-      { x1: 16, y1: 32 },
-      { x1: 32, y1: 32 },
-      { x1: 48, y1: 32 },
-      { x1: 64, y1: 32 },
-      { x1: 80, y1: 32 },
-      { x1: 96, y1: 32 },
-      { x1: 112, y1: 32 },
+      imagenes[3].get(0, 32, 16, 16),
+      imagenes[3].get(80, 0, 16, 16),
+      imagenes[3].get(96, 0, 16, 16),
+      imagenes[3].get(16, 32, 16, 16),
+      imagenes[3].get(32, 32, 16, 16),
+      imagenes[3].get(48, 32, 16, 16),
+      imagenes[3].get(64, 32, 16, 16),
+      imagenes[3].get(80, 32, 16, 16),
+      imagenes[3].get(96, 32, 16, 16),
+      imagenes[3].get(112, 32, 16, 16),
     ];
 
-    let buffer = createGraphics(width, height);
+    let buffer = createGraphics(width, height); // crea un buffer para optimizar el rendimiento
     buffer.noSmooth();
+    buffer.noStroke();
+
+    buffer.background("#74A334");
 
     for (let i = 0; i < numDetalles; i++) {
-      let x = random(width);
-      let y = random(height);
-      let tipo = random(posDetalles);
-      let detalle = imagenes[3].get(tipo.x1, tipo.y1, 16, 16);
-      buffer.image(detalle, x, y, detallesTamano, detallesTamano);
+      buffer.image(
+        random(posDetalles),
+        random(width),
+        random(height),
+        detallesTamano,
+        detallesTamano
+      );
     }
 
     this.decor = buffer;
@@ -356,7 +360,7 @@ class Juego {
 
     let numObstaculos = 5 + this.nivel * 2;
     for (let i = 0; i < numObstaculos; i++) {
-      let tipo = i % 2 === 0 ? "movil" : "estatico";
+      let tipo = i % 2 === 0 ? "movil" : "estatico"; // alternar entre movil y estatico
       this.obstaculos.push(new Obstaculo(tipo));
     }
 
@@ -401,7 +405,12 @@ class Juego {
   }
 
   haTerminado() {
-    return this.tesorosRecogidos >= 50 || this.jugador.vidas <= 0;
+    if (this.tesorosRecogidos >= 50 || this.jugador.vidas <= 0) {
+      sonidos[3].stop();
+      sonidos[2].play();
+      return true;
+    }
+    return false;
   }
 
   teclaPresionada() {
@@ -409,21 +418,23 @@ class Juego {
   }
 }
 
-let principal;
-let imagenes = [];
-let sonidos = [];
+let principal, imagenes, sonidos;
 
 function preload() {
-  imagenes.push(loadImage("./assets/img/tesoro.png"));
-  imagenes.push(loadImage("./assets/img/monkey.png"));
-  imagenes.push(loadImage("./assets/img/boy.png"));
-  imagenes.push(loadImage("./assets/img/floor-details.png"));
-  imagenes.push(loadImage("./assets/img/hole.png"));
+  imagenes = [
+    loadImage("./assets/img/tesoro.png"),
+    loadImage("./assets/img/monkey.png"),
+    loadImage("./assets/img/boy.png"),
+    loadImage("./assets/img/floor-details.png"),
+    loadImage("./assets/img/hole.png"),
+  ];
 
   soundFormats("wav");
-  sonidos.push(loadSound("./assets/sound/coin.wav"));
-  sonidos.push(loadSound("./assets/sound/hit.wav"));
-  sonidos.push(loadSound("./assets/sound/game-over.wav"));
+  sonidos = [
+    loadSound("./assets/sound/coin.wav"),
+    loadSound("./assets/sound/hit.wav"),
+    loadSound("./assets/sound/game-over.wav"),
+  ];
   soundFormats("ogg");
   sonidos.push(loadSound("./assets/sound/game.ogg"));
 }
